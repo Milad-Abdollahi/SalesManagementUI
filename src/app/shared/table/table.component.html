@@ -1,0 +1,26 @@
+<p>table works!</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <!-- <th *ngFor="let column of columns()">{{ column.label }}</th> -->
+            @for (column of columns(); track column.label) {
+            <th>{{ column.label }}</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <!-- <tr *ngFor="let row of data()">
+            <td *ngFor="let column of columns()">{{ row[column.key] }}</td>
+        </tr> -->
+        @for (row of data(); track $index) {
+        <tr>
+            @for (column of columns(); track column.key) {
+            <td>
+                {{ row[column.key] }}
+            </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>
