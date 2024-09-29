@@ -1,37 +1,52 @@
 {
-  "hash": "7c466dff",
-  "configHash": "1e1b1642",
-  "lockfileHash": "857a18da",
-  "browserHash": "d81a0ff6",
+  "hash": "4f26a843",
+  "configHash": "34f786ab",
+  "lockfileHash": "449ad0e6",
+  "browserHash": "e0b5ed16",
   "optimized": {
+    "@angular/common": {
+      "src": "../../../../../node_modules/@angular/common/fesm2022/common.mjs",
+      "file": "@angular_common.js",
+      "fileHash": "c48235c6",
+      "needsInterop": false
+    },
+    "@angular/common/http": {
+      "src": "../../../../../node_modules/@angular/common/fesm2022/http.mjs",
+      "file": "@angular_common_http.js",
+      "fileHash": "9dfaf283",
+      "needsInterop": false
+    },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "887afb47",
+      "fileHash": "0d141160",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "7005c805",
+      "fileHash": "7147e954",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "783dc5e9",
+      "fileHash": "14500e49",
       "needsInterop": false
     },
-    "@angular/common": {
-      "src": "../../../../../node_modules/@angular/common/fesm2022/common.mjs",
-      "file": "@angular_common.js",
-      "fileHash": "6f08c4cb",
+    "ag-grid-angular": {
+      "src": "../../../../../node_modules/ag-grid-angular/fesm2022/ag-grid-angular.mjs",
+      "file": "ag-grid-angular.js",
+      "fileHash": "d1bb443d",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-LBXA43VN": {
-      "file": "chunk-LBXA43VN.js"
+    "chunk-HC22QQNX": {
+      "file": "chunk-HC22QQNX.js"
+    },
+    "chunk-AX5IVMTF": {
+      "file": "chunk-AX5IVMTF.js"
     },
     "chunk-XD3Y76EE": {
       "file": "chunk-XD3Y76EE.js"

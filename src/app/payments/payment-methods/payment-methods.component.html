@@ -1,10 +1,14 @@
 <div class="container mt-4">
     <h2>Payment Methods</h2>
-    <ul class="list-group">
-        @for (paymentMethod of paymentMethods(); track paymentMethod.id) {
-        <p>{{ paymentMethod.id }} - {{ paymentMethod.name }}</p>
-        }
-    </ul>
     <button class="btn btn-primary mt-3" (click)="addPaymentMethod()">Add New Method</button>
+    <ag-grid-angular
+        [rowData]="paymentMethods()"
+        [columnDefs]="colDefs"
+        class="ag-theme-quartz"
+        style="height: 500px"
+        [enableRtl]="true"
+        (rowDoubleClicked)="onRowDoubleClicked($event)"
+    />
 </div>
-<p></p>
+
+<!-- The AG Grid component -->
