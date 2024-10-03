@@ -10,13 +10,14 @@ import { catchError, retry, tap } from 'rxjs/operators';
 export class PaymentMethodService {
     private httpClient = inject(HttpClient);
 
-    paymentMethodsArray: PaymentMethod[] = [];
+    private paymentMethods = signal<PaymentMethod[]>([]);
+    public readonly loadedPaymentMethods = this.paymentMethods.asReadonly();
 
     public getAllPaymentMethods() {
         return this.fetchPaymentMethods(
             'https://localhost:7276/api/PaymentMetods',
             'something went wrong'
-        );
+        ).pipe(tap({ next: (paymentMethods) => this.paymentMethods.set(paymentMethods) }));
     }
 
     public getPaymentMethodById(id: number): Observable<PaymentMethod> {
