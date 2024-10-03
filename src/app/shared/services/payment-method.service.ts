@@ -1,8 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { PaymentMethod } from '../models/payment-method.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, tap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
@@ -10,33 +10,50 @@ import { tap } from 'rxjs/operators';
 export class PaymentMethodService {
     private httpClient = inject(HttpClient);
 
-    // Todo: ask about pipe and tap
-    // fetchPaymentMethods(): Observable<PaymentMethod[]> {
-    //     return this.httpClient
-    //         .get<PaymentMethod[]>('https://your-api-url.com/api/GetAllPaymentMethods')
-    //         .pipe(tap((paymentMethods) => this.paymentMethodsSignal.set(paymentMethods)));
-    // }
+    paymentMethodsArray: PaymentMethod[] = [];
 
-    paymentMethodsArray: PaymentMethod[] = [
-        { id: 1, name: 'نقد' },
-        { id: 2, name: 'چکی' },
-        { id: 3, name: 'اقساطی' },
-        { id: 4, name: 'اقساطی دو' },
-    ];
-
-    private paymentMethodsSignal = signal<PaymentMethod[]>(this.paymentMethodsArray);
-
-    readonly paymentMethods = this.paymentMethodsSignal.asReadonly();
-
-    addPaymentMethod(id: number, name: string) {
-        const newPaymentMethod: PaymentMethod = { id: id, name: name };
-        const updatedPaymentMethods = [...this.paymentMethodsArray, newPaymentMethod];
-        this.paymentMethodsArray = updatedPaymentMethods;
-        this.paymentMethodsSignal.set(this.paymentMethodsArray);
+    public getAllPaymentMethods() {
+        return this.fetchPaymentMethods(
+            'https://localhost:7276/api/PaymentMetods',
+            'something went wrong'
+        );
     }
 
-    public getPaymentMethodById(id: number): PaymentMethod | undefined {
-        const output = this.paymentMethodsArray.find((paymentMethod) => paymentMethod.id === id);
-        return output;
+    public getPaymentMethodById(id: number): Observable<PaymentMethod> {
+        const url = 'https://localhost:7276/api/PaymentMetods/' + id;
+        return this.fetchPaymentMethod(url, 'there was en error!');
+    }
+
+    private fetchPaymentMethods(url: string, errorMessge: string): Observable<PaymentMethod[]> {
+        return this.httpClient
+            .get<PaymentMethod[]>(url, {
+                observe: 'body',
+            })
+            .pipe(
+                catchError((err) => {
+                    console.log(err);
+                    return throwError(() => new Error(errorMessge));
+                })
+            );
+    }
+
+    private fetchPaymentMethod(url: string, errorMessge: string): Observable<PaymentMethod> {
+        return this.httpClient
+            .get<PaymentMethod>(url, {
+                observe: 'body',
+            })
+            .pipe(
+                catchError((err) => {
+                    console.log(err);
+                    return throwError(() => new Error(errorMessge));
+                })
+            );
+    }
+
+    addPaymentMethod(id: number, metodName: string) {
+        // const newPaymentMethod: PaymentMethod = { id: id, metodName: metodName };
+        // const updatedPaymentMethods = [...this.paymentMethodsArray, newPaymentMethod];
+        // this.paymentMethodsArray = updatedPaymentMethods;
+        // this.paymentMethodsSignal.set(this.paymentMethodsArray);
     }
 }
