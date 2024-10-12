@@ -1,4 +1,16 @@
-<p>{{ paymentMethod()?.id }}</p>
-<p>{{ paymentMethod()?.metodName }}</p>
+<form [formGroup]="paymentMethodForm" (ngSubmit)="onSubmit()">
+    <div class="mb-12">
+        <label class="form-label" for="id">Id</label>
+        <input class="form-control" id="id" type="text" formControlName="id" />
+    </div>
 
-
+    <div class="mb-3">
+        <label class="form-label" for="methodName">methodName</label>
+        <input class="form-control" id="methodName" formControlName="metodName" />
+    </div>
+    @if (isEditing) {
+    <button class="btn btn-primary" type="submit" (click)="onSubmit()">ذخیره</button>
+    } @else if (!isEditing) {
+    <button class="btn btn-secondary" type="button" (click)="onEditing()">ویرایش</button>
+    }
+</form>

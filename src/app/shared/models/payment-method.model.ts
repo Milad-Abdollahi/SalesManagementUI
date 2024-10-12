@@ -3,7 +3,3 @@ export interface PaymentMethod {
     metodName: string;
 }
 
-export interface PaymentMethodFromAPI {
-    id: number;
-    metodName: string;
-}

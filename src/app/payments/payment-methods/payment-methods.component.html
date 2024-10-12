@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <h2>Payment Methods</h2>
-    <button class="btn btn-primary mt-3" (click)="addPaymentMethod()">Add New Method</button>
+    <button type="button" class="btn btn-primary mt-3" (click)="onClicklAddBtn()">➕</button>
     @if (isFetching() && !error()) {
     <p>Loading ...</p>
     <p class="spinner-border spinner-border-sm"></p>
@@ -8,15 +8,20 @@
     } @if (error()) {
     <p>{{ error() }}</p>
     }
-
-    <ag-grid-angular
-        [rowData]="paymentMethods()"
-        [columnDefs]="colDefs"
-        class="ag-theme-quartz"
-        style="height: 500px"
-        [enableRtl]="true"
-        (rowDoubleClicked)="onRowDoubleClicked($event)"
-    />
+    <div class="row">
+        <div class="col-12">
+            <ag-grid-angular
+                [rowData]="paymentMethods()"
+                [columnDefs]="colDefs"
+                class="ag-theme-quartz"
+                style="width: 100%"
+                [enableRtl]="true"
+                [domLayout]="'autoHeight'"
+                (gridReady)="onGridReady($event)"
+                (rowDoubleClicked)="onRowDoubleClicked($event)"
+            />
+        </div>
+    </div>
 </div>
 
 <!-- The AG Grid component -->

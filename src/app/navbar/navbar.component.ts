@@ -33,10 +33,10 @@ export class NavbarComponent {
             ],
         },
         {
-            name: 'Payments',
+            name: 'پرداخت ها',
             nestedItems: [
                 { name: 'Payments Info', path: '/payments' },
-                { name: 'Payment Methods', path: 'payments/payment-methods' },
+                { name: 'روش های پرداخت', path: 'payments/payment-methods' },
             ],
         },
     ];

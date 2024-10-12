@@ -13,13 +13,4 @@ import { TableComponent } from './shared/table/table.component';
 export class AppComponent {
     title = 'SalesManagementUI';
 
-    // users = [
-    //     { id: 1, firstName: 'John', lastName: 'Doe' },
-    //     { id: 2, firstName: 'Jane', lastName: 'Smith' },
-    // ];
-
-    // userColumns = [
-    //     { key: 'firstName', label: 'First Name' },
-    //     { key: 'lastName', label: 'Last Name' },
-    // ];
 }

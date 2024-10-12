@@ -1,12 +1,12 @@
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-
-import { PaymentMethodService } from '../../shared/services/payment-method.service';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
 import { Router } from '@angular/router';
-// import { HttpClient } from '@angular/common/http';
-// import { PaymentMethod, PaymentMethodFromAPI } from '../../shared/models/payment-method.model';
-// import { catchError, throwError } from 'rxjs';
+
+import { PaymentMethodService } from '../../shared/services/payment-method.service';
+
+
+// URL: /payment-methods
 
 @Component({
     selector: 'app-payment-methods',
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
     styleUrl: './payment-methods.component.css',
 })
 export class PaymentMethodsComponent implements OnInit {
-    constructor(private router: Router) {}
+    private router = inject(Router);
     private paymentMethodService = inject(PaymentMethodService);
     private destroyRef = inject(DestroyRef);
 
@@ -41,10 +41,12 @@ export class PaymentMethodsComponent implements OnInit {
         });
     }
 
-    addPaymentMethod() {
-        // const newId = this.paymentMethods().length + 1;
-        // const newName = 'ravesh pardakht jadid';
-        // this.paymentMethodService.addPaymentMethod(newId, newName);
+    onGridReady(params: any) {
+        params.api.sizeColumnsToFit();
+    }
+
+    onClicklAddBtn() {
+        this.router.navigate(['payments/payment-methods/new']);
     }
 
     colDefs: ColDef[] = [
@@ -54,6 +56,6 @@ export class PaymentMethodsComponent implements OnInit {
 
     onRowDoubleClicked(event: any) {
         const id = event.data.id;
-        this.router.navigate(['payments/payment-methods', id]);
+        this.router.navigate(['payments/payment-methods/details', id]);
     }
 }
