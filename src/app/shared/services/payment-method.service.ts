@@ -19,6 +19,26 @@ export class PaymentMethodService {
 
     // public updatePaymentMethod(paymentMethod: PaymentMethod) {}
 
+    // Create
+
+    public CreatePaymentMethod(paymentMethodCreateDto: PaymentMethodCreateDto) {
+        return this.addPaymentMethod(
+            'https://localhost:7276/api/PaymentMetods',
+            'something went wrong creating payment method!',
+            paymentMethodCreateDto
+        );
+    }
+
+    private addPaymentMethod(
+        url: string,
+        errorMessage: string,
+        paymentMethodCreateDto: PaymentMethodCreateDto
+    ) {
+        return this.httpClient
+            .post(url, paymentMethodCreateDto, { observe: 'body' })
+            .pipe(catchError(catchError(handleError(errorMessage))));
+    }
+
     // Read
 
     public getAllPaymentMethods() {
@@ -73,30 +93,22 @@ export class PaymentMethodService {
 
     private updatePaymentMethod(
         url: string,
-        errorMessge: string,
+        errorMessage: string,
         paymentMethodCreateDto: PaymentMethodCreateDto
     ) {
         return this.httpClient
             .put((url = url), (paymentMethodCreateDto = paymentMethodCreateDto), {
                 observe: 'body',
             })
-            .pipe(
-                catchError((err) => {
-                    console.log(err.error);
-                    return throwError(
-                        () =>
-                            new Error(
-                                errorMessge + '\n' + err.error.message + '\n' + err.error.title
-                            )
-                    );
-                })
-            );
+            .pipe(catchError(handleError(errorMessage)));
     }
+}
 
-    addPaymentMethod(id: number, metodName: string) {
-        // const newPaymentMethod: PaymentMethod = { id: id, metodName: metodName };
-        // const updatedPaymentMethods = [...this.paymentMethodsArray, newPaymentMethod];
-        // this.paymentMethodsArray = updatedPaymentMethods;
-        // this.paymentMethodsSignal.set(this.paymentMethodsArray);
-    }
+function handleError(errorMessage: string) {
+    return (err: any) => {
+        console.log(err.error);
+        return throwError(
+            () => new Error(errorMessage + '\n' + err.error.message + '\n' + err.error.title)
+        );
+    };
 }
