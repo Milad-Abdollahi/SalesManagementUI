@@ -63,4 +63,16 @@ export class PaymentMethodDetailsComponent implements OnInit {
             });
         this.destroyRef.onDestroy(() => updateSubscription.unsubscribe());
     }
+
+    onDelete() {
+        const deleteSubscription = this.paymentMethodService
+            .deletePaymentMethodById(this.id)
+            .subscribe({
+                next: (resData) => {
+                    console.log(resData);
+                },
+            });
+
+        this.destroyRef.onDestroy(() => deleteSubscription.unsubscribe());
+    }
 }

@@ -33,10 +33,10 @@ export class PaymentMethodService {
         url: string,
         errorMessage: string,
         paymentMethodCreateDto: PaymentMethodCreateDto
-    ) {
+    ): Observable<PaymentMethod> {
         return this.httpClient
-            .post(url, paymentMethodCreateDto, { observe: 'body' })
-            .pipe(catchError(catchError(handleError(errorMessage))));
+            .post<PaymentMethod>(url, paymentMethodCreateDto, { observe: 'body' })
+            .pipe(catchError(handleError(errorMessage)));
     }
 
     // Read
@@ -101,6 +101,19 @@ export class PaymentMethodService {
                 observe: 'body',
             })
             .pipe(catchError(handleError(errorMessage)));
+    }
+
+    // Delete
+
+    public deletePaymentMethodById(id: number) {
+        return this.deletePaymentMethod(
+            `https://localhost:7276/api/PaymentMetods/${id}`,
+            'something went wrong deleting the payment method'
+        );
+    }
+
+    private deletePaymentMethod(url: string, errorMessage: string) {
+        return this.httpClient.delete(url).pipe(catchError(handleError(errorMessage)));
     }
 }
 
