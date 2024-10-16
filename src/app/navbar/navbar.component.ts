@@ -37,6 +37,7 @@ export class NavbarComponent {
             nestedItems: [
                 { name: 'Payments Info', path: '/payments' },
                 { name: 'روش های پرداخت', path: 'payments/payment-methods' },
+                { name: 'وضعیت های پرداخت', path: 'payments/payment-statuses' },
             ],
         },
     ];

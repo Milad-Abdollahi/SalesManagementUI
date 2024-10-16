@@ -1,3 +1,3 @@
 export interface PaymentMethodCreateDto {
-    metodName: string;
+    methodName: string;
 }

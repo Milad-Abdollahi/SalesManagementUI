@@ -21,7 +21,7 @@ export class NewPaymentMethodComponent {
 
     onSave() {
         const paymentMethodCreateDto: PaymentMethodCreateDto = {
-            metodName: this.newPaymentMethodForm.value.methodName!,
+            methodName: this.newPaymentMethodForm.value.methodName!,
         };
         this.paymentMethodService.CreatePaymentMethod(paymentMethodCreateDto).subscribe({
             next: (resData) => {

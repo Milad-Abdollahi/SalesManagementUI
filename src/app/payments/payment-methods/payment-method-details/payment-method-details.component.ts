@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, Input, numberAttribute, OnInit } from '@
 import { PaymentMethodService } from '../../../shared/services/payment-method.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PaymentMethodCreateDto } from '../../../shared/models/dtos/payment-methos-create-dto.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-payment-method-details',
@@ -15,12 +16,14 @@ export class PaymentMethodDetailsComponent implements OnInit {
     @Input({ transform: numberAttribute }) id = 0;
     private paymentMethodService = inject(PaymentMethodService);
     private destroyRef = inject(DestroyRef);
+    private router = inject(Router);
+
     public paymentMethod = this.paymentMethodService.loadedPaymentMethod;
     public isEditing = false;
 
     public paymentMethodForm = new FormGroup({
         id: new FormControl<number | undefined>({ value: undefined, disabled: true }),
-        metodName: new FormControl<string | undefined>({
+        methodName: new FormControl<string | undefined>({
             value: undefined,
             disabled: true,
         }),
@@ -31,7 +34,7 @@ export class PaymentMethodDetailsComponent implements OnInit {
             next: () => {
                 this.paymentMethodForm.patchValue({
                     id: this.paymentMethod()?.id,
-                    metodName: this.paymentMethod()?.metodName,
+                    methodName: this.paymentMethod()?.methodName,
                 });
             },
             error: (err) => console.log(err),
@@ -42,11 +45,13 @@ export class PaymentMethodDetailsComponent implements OnInit {
 
     onEditing() {
         this.isEditing = true;
-        this.paymentMethodForm.get('metodName')?.enable();
+        this.paymentMethodForm.get('methodName')?.enable();
     }
 
     onSubmit() {
-        const data: PaymentMethodCreateDto = { metodName: this.paymentMethodForm.value.metodName! };
+        const data: PaymentMethodCreateDto = {
+            methodName: this.paymentMethodForm.value.methodName!,
+        };
         const updateSubscription = this.paymentMethodService
             .updatePaymentMethodById(this.id, data)
             .subscribe({
@@ -57,7 +62,7 @@ export class PaymentMethodDetailsComponent implements OnInit {
                     window.alert(err);
                 },
                 complete: () => {
-                    this.paymentMethodForm.get('metodName')?.disable();
+                    this.paymentMethodForm.get('methodName')?.disable();
                     this.isEditing = false;
                 },
             });
@@ -70,6 +75,7 @@ export class PaymentMethodDetailsComponent implements OnInit {
             .subscribe({
                 next: (resData) => {
                     console.log(resData);
+                    this.router.navigate(['payments/payment-methods']);
                 },
             });
 

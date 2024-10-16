@@ -17,13 +17,11 @@ export class PaymentMethodService {
     private selectedPaymentMethod = signal<PaymentMethod | undefined>(undefined);
     public readonly loadedPaymentMethod = this.selectedPaymentMethod.asReadonly();
 
-    // public updatePaymentMethod(paymentMethod: PaymentMethod) {}
-
     // Create
 
     public CreatePaymentMethod(paymentMethodCreateDto: PaymentMethodCreateDto) {
         return this.addPaymentMethod(
-            'https://localhost:7276/api/PaymentMetods',
+            'https://localhost:7276/api/PaymentMethods',
             'something went wrong creating payment method!',
             paymentMethodCreateDto
         );
@@ -43,13 +41,13 @@ export class PaymentMethodService {
 
     public getAllPaymentMethods() {
         return this.fetchPaymentMethods(
-            'https://localhost:7276/api/PaymentMetods',
+            'https://localhost:7276/api/PaymentMethods',
             'something went wrong fetching payment methods!'
         ).pipe(tap({ next: (paymentMethods) => this.paymentMethods.set(paymentMethods) }));
     }
 
     public getPaymentMethodById(id: number): Observable<PaymentMethod> {
-        const url = `https://localhost:7276/api/PaymentMetods/${id}`;
+        const url = `https://localhost:7276/api/PaymentMethods/${id}`;
         return this.fetchPaymentMethod(url, 'there was en error!').pipe(
             tap({ next: (paymentMethod) => this.selectedPaymentMethod.set(paymentMethod) })
         );
@@ -85,7 +83,7 @@ export class PaymentMethodService {
 
     public updatePaymentMethodById(id: number, paymentMethodCreateDto: PaymentMethodCreateDto) {
         return this.updatePaymentMethod(
-            `https://localhost:7276/api/PaymentMetods/${id}`,
+            `https://localhost:7276/api/PaymentMethods/${id}`,
             'something went wrong updating a payment method',
             paymentMethodCreateDto
         );
@@ -107,7 +105,7 @@ export class PaymentMethodService {
 
     public deletePaymentMethodById(id: number) {
         return this.deletePaymentMethod(
-            `https://localhost:7276/api/PaymentMetods/${id}`,
+            `https://localhost:7276/api/PaymentMethods/${id}`,
             'something went wrong deleting the payment method'
         );
     }
