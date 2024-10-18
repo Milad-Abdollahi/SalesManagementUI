@@ -14,19 +14,18 @@ import { Router } from '@angular/router';
 export class PaymentMethodDetailsComponent implements OnInit {
     // id is imported from the url
     @Input({ transform: numberAttribute }) id = 0;
+
     private paymentMethodService = inject(PaymentMethodService);
     private destroyRef = inject(DestroyRef);
     private router = inject(Router);
 
     public paymentMethod = this.paymentMethodService.loadedPaymentMethod;
+
     public isEditing = false;
 
     public paymentMethodForm = new FormGroup({
         id: new FormControl<number | undefined>({ value: undefined, disabled: true }),
-        methodName: new FormControl<string | undefined>({
-            value: undefined,
-            disabled: true,
-        }),
+        methodName: new FormControl<string | undefined>({ value: undefined, disabled: true }),
     });
 
     ngOnInit(): void {

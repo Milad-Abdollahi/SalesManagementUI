@@ -9,6 +9,11 @@ import { HttpClient } from '@angular/common/http';
 export class HttpClientDataAccessService implements IHttpClientDataAccessService {
     private httpClient = inject(HttpClient);
 
+    postData<T, U>(baseUrl: string, controllerPath: string, reqBody: U): Observable<T> {
+        var result = this.httpClient.post<T>(`${baseUrl}${controllerPath}`, reqBody);
+        return result;
+    }
+
     LoadDataArray<T>(baseUrl: string, controllerPath: string): Observable<T[]> {
         var result = this.httpClient.get<T[]>(`${baseUrl}${controllerPath}`, { observe: 'body' });
         return result;
@@ -16,6 +21,18 @@ export class HttpClientDataAccessService implements IHttpClientDataAccessService
 
     LoadData<T>(baseUrl: string, controllerPath: string): Observable<T> {
         var result = this.httpClient.get<T>(`${baseUrl}${controllerPath}`, { observe: 'body' });
+        return result;
+    }
+
+    saveData<T>(baseUrl: string, controllerPath: string, parameters: T): Observable<any> {
+        var result = this.httpClient.put(`${baseUrl}${controllerPath}`, parameters, {
+            observe: 'body',
+        });
+        return result;
+    }
+
+    deleteData(baseUrl: string, controllerPath: string): Observable<any> {
+        const result = this.httpClient.delete(`${baseUrl}${controllerPath}`);
         return result;
     }
 }

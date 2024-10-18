@@ -7,6 +7,7 @@ import { PaymentMethodDetailsComponent } from './payments/payment-methods/paymen
 import { NewPaymentMethodComponent } from './payments/payment-methods/new-payment-method/new-payment-method.component';
 import { PaymentStatusesComponent } from './payments/payment-statuses/payment-statuses.component';
 import { PaymentStatusDetailsComponent } from './payments/payment-statuses/payment-status-details/payment-status-details/payment-status-details.component';
+import { NewPaymentStatusComponent } from './payments/payment-statuses/new-payment-status/new-payment-status.component';
 
 export const routes: Routes = [
     { path: 'users', component: UsersComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
             { path: 'payment-methods/new', component: NewPaymentMethodComponent },
             { path: 'payment-statuses', component: PaymentStatusesComponent },
             { path: 'payment-statuses/details/:id', component: PaymentStatusDetailsComponent },
+            { path: 'payment-statuses/new', component: NewPaymentStatusComponent },
         ],
     },
 ];

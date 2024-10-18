@@ -1,0 +1,15 @@
+<form [formGroup]="newPaymentStatusForm" (ngSubmit)="onSave()" dir="rtl">
+    <div class="mb-3 row" dir="rtl">
+        <label for="methodName" class="col-sm-2 col-form-label text-end">وضعیت پرداخت</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="statusName" formControlName="statusName" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col-sm-10 offset-sm-2">
+            <button class="btn btn-primary" type="submit" [disabled]="newPaymentStatusForm.invalid">
+                ذخیره
+            </button>
+        </div>
+    </div>
+</form>

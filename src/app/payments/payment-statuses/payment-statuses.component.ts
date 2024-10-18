@@ -44,6 +44,10 @@ export class PaymentStatusesComponent implements OnInit {
         params.api.sizeColumnsToFit();
     }
 
+    onClickAddBtn() {
+        this.router.navigate(['payments/payment-statuses/new']);
+    }
+
     onRowDoubleClicked(event: any) {
         const id = event.data.id;
         this.router.navigate(['payments/payment-statuses/details', id]);

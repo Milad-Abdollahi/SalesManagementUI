@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 
 import { PaymentMethodService } from '../../shared/services/payment-method.service';
 
-
 // URL: /payment-methods
 
 @Component({
@@ -24,6 +23,11 @@ export class PaymentMethodsComponent implements OnInit {
 
     isFetching = signal(false);
     error = signal('');
+
+    colDefs: ColDef[] = [
+        { field: 'id', headerName: 'آیدی' },
+        { field: 'methodName', headerName: 'روش پرداخت' },
+    ];
 
     ngOnInit(): void {
         this.isFetching.set(true);
@@ -48,11 +52,6 @@ export class PaymentMethodsComponent implements OnInit {
     onClicklAddBtn() {
         this.router.navigate(['payments/payment-methods/new']);
     }
-
-    colDefs: ColDef[] = [
-        { field: 'id', headerName: 'آیدی' },
-        { field: 'methodName', headerName: 'روش پرداخت' },
-    ];
 
     onRowDoubleClicked(event: any) {
         const id = event.data.id;
