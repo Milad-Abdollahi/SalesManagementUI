@@ -1,0 +1,15 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" dir="rtl">
+    @for (field of fields; track field) {
+    <div class="form-row">
+        <app-entity-form-field [field]="field" [form]="form"></app-entity-form-field>
+    </div>
+    }
+    <div class="form-row">
+        <button class="btn btn-success" type="submit" [disabled]="!form.valid">Save</button>
+    </div>
+</form>
+@if (payLoad) {
+<div class="form-row">
+    <strong>Saved the following values</strong>
+</div>
+}

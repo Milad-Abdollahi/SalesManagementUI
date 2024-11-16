@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaymentMethodCreateDto } from '../../../shared/models/dtos/payment-methos-create-dto.model';
 import { PaymentMethodService } from '../../../shared/services/payment-method.service';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class NewPaymentMethodComponent {
     private paymentMethodService = inject(PaymentMethodService);
     private router = inject(Router);
+    private destroyRef = inject(DestroyRef);
 
     public newPaymentMethodForm = new FormGroup({
         methodName: new FormControl<string | undefined>(undefined, Validators.required),
@@ -23,7 +24,7 @@ export class NewPaymentMethodComponent {
         const paymentMethodCreateDto: PaymentMethodCreateDto = {
             methodName: this.newPaymentMethodForm.value.methodName!,
         };
-        this.paymentMethodService.CreatePaymentMethod(paymentMethodCreateDto).subscribe({
+        const subscription = this.paymentMethodService.create(paymentMethodCreateDto).subscribe({
             next: (resData) => {
                 console.log(resData);
                 this.router.navigate(['payments/payment-methods/details', resData.id]);
@@ -31,6 +32,9 @@ export class NewPaymentMethodComponent {
             error: (err) => {
                 window.alert(err);
             },
+        });
+        this.destroyRef.onDestroy(() => {
+            subscription.unsubscribe();
         });
     }
 }

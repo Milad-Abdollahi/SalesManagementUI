@@ -14,17 +14,17 @@ export class HttpClientDataAccessService implements IHttpClientDataAccessService
         return result;
     }
 
-    LoadDataArray<T>(baseUrl: string, controllerPath: string): Observable<T[]> {
+    getDataArray<T>(baseUrl: string, controllerPath: string): Observable<T[]> {
         var result = this.httpClient.get<T[]>(`${baseUrl}${controllerPath}`, { observe: 'body' });
         return result;
     }
 
-    LoadData<T>(baseUrl: string, controllerPath: string): Observable<T> {
+    getData<T>(baseUrl: string, controllerPath: string): Observable<T> {
         var result = this.httpClient.get<T>(`${baseUrl}${controllerPath}`, { observe: 'body' });
         return result;
     }
 
-    saveData<T>(baseUrl: string, controllerPath: string, parameters: T): Observable<any> {
+    putData<T>(baseUrl: string, controllerPath: string, parameters: T): Observable<any> {
         var result = this.httpClient.put(`${baseUrl}${controllerPath}`, parameters, {
             observe: 'body',
         });

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { IPaymentStatusRepositoryService } from './Interfaces/Ipayment-status-repository.service';
+import { IRepositoryService } from './Interfaces/Irepository.service';
 import { Observable, retry, tap, throwError } from 'rxjs';
-import { PaymentStatus } from '../Models/payment-status.model';
+import { IPaymentStatus } from '../Models/payment-status.model';
 import { IHttpClientDataAccessService } from '../HttpClient/Ihttp-client-data-access.service';
 import { HttpClientDataAccessService } from '../HttpClient/http-client-data-access.service';
 import { PaymentStatusCreateDto } from '../Models/Dto/payment-status-create-dto';
@@ -10,19 +10,21 @@ import { NavigationSkipped } from '@angular/router';
 @Injectable({
     providedIn: 'root',
 })
-export class PaymentStatusRepositoryService implements IPaymentStatusRepositoryService {
+export class PaymentStatusRepositoryService
+    implements IRepositoryService<IPaymentStatus, PaymentStatusCreateDto>
+{
     private httpClientDataAccessService: IHttpClientDataAccessService = inject(
         HttpClientDataAccessService
     );
 
     // Create
-    createPaymentStatus(
+    create(
         baseUrl: string,
         endpointPath: string,
         reqBody: PaymentStatusCreateDto
-    ): Observable<PaymentStatus> {
+    ): Observable<IPaymentStatus> {
         const result = this.httpClientDataAccessService.postData<
-            PaymentStatus,
+            IPaymentStatus,
             PaymentStatusCreateDto
         >(baseUrl, endpointPath, reqBody);
         return result;
@@ -30,35 +32,32 @@ export class PaymentStatusRepositoryService implements IPaymentStatusRepositoryS
 
     // Read
 
-    GetAllPaymentStatuses(baseUrl: string, endpointPath: string): Observable<PaymentStatus[]> {
-        const result = this.httpClientDataAccessService.LoadDataArray<PaymentStatus>(
+    readAll(baseUrl: string, endpointPath: string): Observable<IPaymentStatus[]> {
+        const result = this.httpClientDataAccessService.getDataArray<IPaymentStatus>(
             baseUrl,
             endpointPath
         );
         return result;
     }
 
-    GetPaymentStatusById(
-        baseUrl: string,
-        endpointPath: string,
-        id: number
-    ): Observable<PaymentStatus> {
-        const result = this.httpClientDataAccessService.LoadData<PaymentStatus>(
+    readById(baseUrl: string, endpointPath: string, id: number): Observable<IPaymentStatus> {
+        const result = this.httpClientDataAccessService.getData<IPaymentStatus>(
             baseUrl,
             `${endpointPath}${id}`
         );
         return result;
     }
 
+    // Todo: this class is only responsible for data access not handling errors~!
     // Update
-    public updatePaymentStatus(
+    public update(
         baseUrl: string,
         endpointPath: string,
         id: number,
         paymensStatusCreateDto: PaymentStatusCreateDto
     ) {
         const result = this.httpClientDataAccessService
-            .saveData<PaymentStatusCreateDto>(
+            .putData<PaymentStatusCreateDto>(
                 baseUrl,
                 `${endpointPath}${id}`,
                 paymensStatusCreateDto
@@ -77,7 +76,7 @@ export class PaymentStatusRepositoryService implements IPaymentStatusRepositoryS
     }
 
     // Delete
-    deletePaymentStatus(baseUrl: string, endpointPath: string, id: number): Observable<any> {
+    delete(baseUrl: string, endpointPath: string, id: number): Observable<any> {
         const result = this.httpClientDataAccessService.deleteData(baseUrl, `${endpointPath}${id}`);
         return result;
     }

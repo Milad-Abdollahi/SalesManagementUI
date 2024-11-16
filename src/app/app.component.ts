@@ -12,5 +12,4 @@ import { TableComponent } from './shared/table/table.component';
 })
 export class AppComponent {
     title = 'SalesManagementUI';
-
 }

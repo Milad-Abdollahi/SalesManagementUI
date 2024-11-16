@@ -1,27 +1,8 @@
-<div class="container mt-4">
-    <h2>Payment Methods</h2>
-    <button type="button" class="btn btn-primary mt-3" (click)="onClicklAddBtn()">➕</button>
-    @if (isFetching() && !error()) {
-    <p>Loading ...</p>
-    <p class="spinner-border spinner-border-sm"></p>
-
-    } @if (error()) {
-    <p>{{ error() }}</p>
-    }
-    <div class="row">
-        <div class="col-12">
-            <ag-grid-angular
-                [rowData]="paymentMethods()"
-                [columnDefs]="colDefs"
-                class="ag-theme-quartz"
-                style="width: 100%"
-                [enableRtl]="true"
-                [domLayout]="'autoHeight'"
-                (gridReady)="onGridReady($event)"
-                (rowDoubleClicked)="onRowDoubleClicked($event)"
-            />
-        </div>
-    </div>
-</div>
-
-<!-- The AG Grid component -->
+<app-entity-grid
+    [service]="paymentMethodService"
+    detailRoute="payments/payment-methods/details"
+    addNewRoute="payments/payment-methods/new"
+    [colDefs]="colDefs"
+>
+    <h2 dir="rtl">وضعیت های پرداخت</h2>
+</app-entity-grid>

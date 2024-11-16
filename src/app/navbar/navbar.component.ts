@@ -18,10 +18,10 @@ export class NavbarComponent {
             ],
         },
         {
-            name: 'Customers',
+            name: 'مشتریان',
             nestedItems: [
                 { name: 'Customers Info', path: '/customers' },
-                { name: 'Customer Types', path: '/customer-types' },
+                { name: 'انواع مشتریان', path: '/customers/customer-types' },
             ],
         },
         {

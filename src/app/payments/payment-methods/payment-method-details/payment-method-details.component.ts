@@ -29,7 +29,7 @@ export class PaymentMethodDetailsComponent implements OnInit {
     });
 
     ngOnInit(): void {
-        const subscription = this.paymentMethodService.getPaymentMethodById(this.id).subscribe({
+        const subscription = this.paymentMethodService.getById(this.id).subscribe({
             next: () => {
                 this.paymentMethodForm.patchValue({
                     id: this.paymentMethod()?.id,
@@ -51,32 +51,28 @@ export class PaymentMethodDetailsComponent implements OnInit {
         const data: PaymentMethodCreateDto = {
             methodName: this.paymentMethodForm.value.methodName!,
         };
-        const updateSubscription = this.paymentMethodService
-            .updatePaymentMethodById(this.id, data)
-            .subscribe({
-                next: (resData) => {
-                    console.log(resData);
-                },
-                error: (err) => {
-                    window.alert(err);
-                },
-                complete: () => {
-                    this.paymentMethodForm.get('methodName')?.disable();
-                    this.isEditing = false;
-                },
-            });
+        const updateSubscription = this.paymentMethodService.edit(this.id, data).subscribe({
+            next: (resData) => {
+                console.log(resData);
+            },
+            error: (err) => {
+                window.alert(err);
+            },
+            complete: () => {
+                this.paymentMethodForm.get('methodName')?.disable();
+                this.isEditing = false;
+            },
+        });
         this.destroyRef.onDestroy(() => updateSubscription.unsubscribe());
     }
 
     onDelete() {
-        const deleteSubscription = this.paymentMethodService
-            .deletePaymentMethodById(this.id)
-            .subscribe({
-                next: (resData) => {
-                    console.log(resData);
-                    this.router.navigate(['payments/payment-methods']);
-                },
-            });
+        const deleteSubscription = this.paymentMethodService.delete(this.id).subscribe({
+            next: (resData) => {
+                console.log(resData);
+                this.router.navigate(['payments/payment-methods']);
+            },
+        });
 
         this.destroyRef.onDestroy(() => deleteSubscription.unsubscribe());
     }

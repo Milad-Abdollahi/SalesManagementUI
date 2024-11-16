@@ -1,8 +1,9 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PaymentStatusService } from '../../../shared/services/payment-status.service';
 import { PaymentStatusCreateDto } from '../../../DataAccess/Models/Dto/payment-status-create-dto';
+import { HelperFunctions } from '../../../shared/helper-functions';
 
 @Component({
     selector: 'app-new-payment-status',
@@ -25,14 +26,16 @@ export class NewPaymentStatusComponent {
             statusName: this.newPaymentStatusForm.value.statusName!,
         };
 
-        const subscription = this.paymentStatusService
-            .createPaymentStatus(paymentStatusCreateDto)
-            .subscribe({
-                next: (resData) => {
-                    console.log(resData);
-                    this.router.navigate(['payments/payment-statuses/details', resData.id]);
-                },
-            });
+        const subscription = this.paymentStatusService.create(paymentStatusCreateDto).subscribe({
+            next: (resData) => {
+                console.log(resData);
+                this.router.navigate(['payments/payment-statuses/details', resData.id]);
+            },
+            error: (err) => {
+                window.alert(HelperFunctions.extractErrorMessages(err.error));
+                throw new Error(err);
+            },
+        });
 
         this.destroyRef.onDestroy(() => {
             subscription.unsubscribe();

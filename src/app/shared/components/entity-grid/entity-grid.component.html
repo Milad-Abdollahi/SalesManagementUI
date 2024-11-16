@@ -1,0 +1,22 @@
+<div class="container mt-4" dir="rtl">
+    <!-- <ng-content></ng-content> -->
+    <button type="button" class="btn btn-primary mt-3" (click)="onClickAddBtn()">➕</button>
+    @if (isFetching() && !error()) {
+    <p>Loading ...</p>
+    <p class="spinner-border spinner-border-sm"></p>
+    } @if (error()) {
+    <p>{{ error() }}</p>
+    }
+    <div class="col-12">
+        <ag-grid-angular
+            [rowData]="entities()"
+            [columnDefs]="colDefs"
+            class="ag-theme-quartz"
+            style="width: 100%"
+            [enableRtl]="true"
+            [domLayout]="'autoHeight'"
+            (gridReady)="onGridReady($event)"
+            (rowDoubleClicked)="onRowDoubleClicked($event)"
+        />
+    </div>
+</div>

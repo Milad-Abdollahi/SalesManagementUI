@@ -1,0 +1,28 @@
+<div [formGroup]="form">
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label text-end" [attr.for]="field.key">
+            {{ field.label }}
+        </label>
+
+        <div class="col-sm-10">
+            @switch (field.controlType) {@case ('textbox') {
+            <input
+                class="form-control"
+                [formControlName]="field.key"
+                [id]="field.key"
+                [type]="field.type"
+            />
+            }@case ('dropdown') {
+            <select [id]="field.key" [formControlName]="field.key">
+                @for (opt of field.options; track opt) {
+                <option [value]="opt.key">{{ opt.value }}</option>
+                }
+            </select>
+            }}
+        </div>
+    </div>
+
+    @if (!isValid) {
+    <div class="errorMessage">{{ field.label }} is required!</div>
+    }
+</div>
