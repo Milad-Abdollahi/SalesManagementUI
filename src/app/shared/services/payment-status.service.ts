@@ -23,6 +23,8 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
 
     public selectedPaymentStatusFormFields: WritableSignal<FieldBase<string>[]> = signal([]);
 
+    // public isEditing = signal(false);
+
     // Create
     public create(paymentStatusCreateDto: PaymentStatusCreateDto): Observable<IPaymentStatus> {
         return this.paymentStatusRepositoryService
@@ -90,7 +92,7 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
     fieldConfig: { [key: string]: FieldConfig } = {
         // Todo**: change the name of value to initialValue also make it optional
         id: {
-            initialValue: '99',
+            initialValue: 5,
             key: 'id',
             label: 'ID',
             controlType: 'textbox',
@@ -98,10 +100,11 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
             order: 1,
         },
         statusName: {
-            initialValue: 'txc',
+            initialValue: 'aass',
             key: 'statusName',
             label: 'Status Name',
             controlType: 'textbox',
+            disabled: true,
             validators: [Validators.required],
             order: 2,
         },

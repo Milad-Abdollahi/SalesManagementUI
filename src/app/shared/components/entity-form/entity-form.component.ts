@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, WritableSignal } from '@angular/core';
 import { FieldBase } from '../../base-classes/field-base';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -15,14 +15,26 @@ import { FieldControlService } from '../../services/field-control-service';
 })
 export class EntityFormComponent implements OnInit {
     @Input() fields: FieldBase<string>[] | null = [];
-    form!: FormGroup;
-    payLoad = '';
+    @Input() form!: FormGroup;
+    @Input() isEditingSignal!: WritableSignal<boolean>;
+
+    @Output() submitEvent = new EventEmitter<void>();
+    @Output() deleteEvent = new EventEmitter<void>();
+
+    public isEditing = false;
+
     constructor(private fieldControlService: FieldControlService) {}
-    ngOnInit(): void {
-        this.form = this.fieldControlService.toFormGroup(this.fields as FieldBase<string>[]);
-    }
+    ngOnInit(): void {}
     onSubmit() {
-        this.payLoad = JSON.stringify(this.form.getRawValue());
         console.log(this.form);
+        this.submitEvent.emit();
+    }
+    onEditing() {
+        this.form.enable();
+        this.form.get('id')?.disable();
+        this.isEditingSignal.set(true);
+    }
+    onDelete() {
+        this.deleteEvent.emit();
     }
 }

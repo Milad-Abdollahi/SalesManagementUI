@@ -1,30 +1,8 @@
-// import { Injectable } from '@angular/core';
-// import { FormControl, FormGroup, Validators } from '@angular/forms';
-// import { FieldBase } from '../base-classes/field-base';
-
-// @Injectable()
-// export class FieldControlService {
-//     toFormGroup(fields: FieldBase<string>[]) {
-//         const group: any = {};
-//         fields.forEach((field) => {
-//             group[field.key] = field.required
-//                 ? new FormControl(field.value || '', Validators.required)
-//                 : new FormControl(field.value || '');
-//         });
-//         return new FormGroup(group);
-//     }
-
-//     createFormGroup(fields: FieldBase<string>[]){
-
-//     }
-
-// }
-
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FieldBase } from '../base-classes/field-base';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FieldControlService {
     toFormGroup(fields: FieldBase<string>[]) {
         const group: any = {};
@@ -41,5 +19,18 @@ export class FieldControlService {
         return new FormGroup(group);
     }
 
-    createFormGroup(fields: FieldBase<string>[]) {}
+    updateFormGroupValues(form: FormGroup, fields: FieldBase<string>[]): void {
+        fields.forEach((field) => {
+            if (form.controls[field.key]) {
+                form.controls[field.key].setValue(field.initialValue, {
+                    emitEvent: false,
+                });
+                if (field.disabled) {
+                    form.controls[field.key].disable({ emitEvent: false });
+                } else {
+                    form.controls[field.key].enable({ emitEvent: false });
+                }
+            }
+        });
+    }
 }
