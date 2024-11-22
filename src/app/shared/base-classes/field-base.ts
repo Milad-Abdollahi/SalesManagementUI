@@ -5,11 +5,12 @@ export class FieldBase<T> {
     key: string;
     label: string;
     required?: boolean;
-    order: number = 0;
+    order: number = 0; 
     controlType: string;
     type?: string;
     validators: ValidatorFn[];
     disabled?: boolean;
+    includeInDto?: boolean;
     options?: { key: string; value: string }[];
     constructor(options: {
         initialValue: T;
@@ -21,6 +22,7 @@ export class FieldBase<T> {
         type?: string;
         validators?: ValidatorFn[];
         disabled?: boolean;
+        includeInDto?: boolean;
         options?: { key: string; value: string }[];
     }) {
         this.initialValue = options.initialValue;
@@ -32,6 +34,7 @@ export class FieldBase<T> {
         this.type = options.type || '';
         this.validators = options.validators || [];
         this.disabled = options.disabled;
+        this.includeInDto = options.includeInDto !== undefined ? options.includeInDto : true;
         this.options = options.options || [];
     }
 }

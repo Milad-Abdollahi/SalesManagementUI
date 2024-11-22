@@ -19,6 +19,8 @@ import { Observable, tap } from 'rxjs';
 import { FieldBase } from '../../../shared/base-classes/field-base';
 import { FieldControlService } from '../../../shared/services/field-control-service';
 import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
+import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
+import { IPaymentStatus } from '../../../DataAccess/Models/payment-status.model';
 
 @Component({
     selector: 'app-payment-status-details',
@@ -27,82 +29,100 @@ import { EntityFormComponent } from '../../../shared/components/entity-form/enti
     templateUrl: './payment-status-details.component.html',
     styleUrl: './payment-status-details.component.css',
 })
-export class PaymentStatusDetailsComponent implements OnInit {
+export class PaymentStatusDetailsComponent extends EntityDetailsComponent<
+    IPaymentStatus,
+    PaymentStatusCreateDto,
+    PaymentStatusService
+> {
     // id is imported from the url
     @Input({ transform: numberAttribute }) id = 0;
 
+    // Todo**: protected override service: PaymentStatusService = inject(PaymentStatusService);
+    service = inject(PaymentStatusService);
+    router = inject(Router);
+
+    // Todo**: fieldControlService = inject(FieldControlService);
+    constructor(public override fieldControlService: FieldControlService) {
+        super();
+    }
+
     private paymentStatusService = inject(PaymentStatusService);
-    private fieldControlService = inject(FieldControlService);
     private destroyRef = inject(DestroyRef);
-    private router = inject(Router);
+    // Todo**: try meking router private
 
     public paymentStatus = this.paymentStatusService.loadedPaymentStatus;
 
-    isEditingSignal = signal(false);
+    /////////////////////////// OLD ////////////////////////////
+    /////////////////////////// OLD ////////////////////////////
+    /////////////////////////// OLD ////////////////////////////
+    /////////////////////////// OLD ////////////////////////////
+    /////////////////////////// OLD ////////////////////////////
 
-    field$?: Observable<FieldBase<any>[]>;
-    fields: FieldBase<string>[] = [];
+    // isEditingSignal = signal(false);
 
-    public entityForm!: FormGroup;
+    // field$?: Observable<FieldBase<any>[]>;
+    // fields: FieldBase<string>[] = [];
 
-    ngOnInit(): void {
-        this.field$ = this.paymentStatusService.getFields();
+    // public entityForm!: FormGroup;
 
-        const fieldsSubscription = this.paymentStatusService.getFields().subscribe({
-            next: (fields) => {
-                this.fields = fields;
-                this.entityForm = this.fieldControlService.toFormGroup(fields);
-            },
-        });
+    // ngOnInit(): void {
+    //     this.field$ = this.paymentStatusService.getFields();
 
-        const subscription = this.paymentStatusService.getById(this.id).subscribe({
-            next: () => {
-                this.entityForm.patchValue({
-                    id: this.paymentStatus()?.id,
-                    statusName: this.paymentStatus()?.statusName,
-                });
-            },
-            error: (err) => console.log(err),
-        });
+    //     const fieldsSubscription = this.paymentStatusService.getFields().subscribe({
+    //         next: (fields) => {
+    //             this.fields = fields;
+    //             this.entityForm = this.fieldControlService.toFormGroup(fields);
+    //         },
+    //     });
 
-        this.destroyRef.onDestroy(() => {
-            subscription.unsubscribe();
-            fieldsSubscription.unsubscribe();
-        });
-    }
+    //     const subscription = this.paymentStatusService.getById(this.id).subscribe({
+    //         next: () => {
+    //             this.entityForm.patchValue({
+    //                 id: this.paymentStatus()?.id,
+    //                 statusName: this.paymentStatus()?.statusName,
+    //             });
+    //         },
+    //         error: (err) => console.log(err),
+    //     });
 
-    onEditing() {
-        this.isEditingSignal.set(true);
-    }
+    //     this.destroyRef.onDestroy(() => {
+    //         subscription.unsubscribe();
+    //         fieldsSubscription.unsubscribe();
+    //     });
+    // }
 
-    onSubmit() {
-        const data: PaymentStatusCreateDto = {
-            statusName: this.entityForm.value.statusName,
-        };
-        const subscription = this.paymentStatusService.edit(this.id, data).subscribe({
-            next: (resData) => {
-                console.log(resData);
-            },
-            error: (err) => {
-                window.alert(HelperFunctions.extractErrorMessages(err.error));
-            },
-            complete: () => {
-                this.entityForm.get('statusName')?.disable();
-                this.isEditingSignal.set(false);
-            },
-        });
-        this.destroyRef.onDestroy(() => subscription.unsubscribe);
-    }
+    // onEditing() {
+    //     this.isEditingSignal.set(true);
+    // }
 
-    onDelete() {
-        const deleteSubscription = this.paymentStatusService.delete(this.id).subscribe({
-            next: (resData) => {
-                console.log(resData);
-                this.router.navigate(['payments/payment-statuses']);
-            },
-        });
-        this.destroyRef.onDestroy(() => {
-            deleteSubscription.unsubscribe();
-        });
-    }
+    // onSubmit() {
+    //     const data: PaymentStatusCreateDto = {
+    //         statusName: this.entityForm.value.statusName,
+    //     };
+    //     const subscription = this.paymentStatusService.edit(this.id, data).subscribe({
+    //         next: (resData) => {
+    //             console.log(resData);
+    //         },
+    //         error: (err) => {
+    //             window.alert(HelperFunctions.extractErrorMessages(err.error));
+    //         },
+    //         complete: () => {
+    //             this.entityForm.get('statusName')?.disable();
+    //             this.isEditingSignal.set(false);
+    //         },
+    //     });
+    //     this.destroyRef.onDestroy(() => subscription.unsubscribe);
+    // }
+
+    // onDelete() {
+    //     const deleteSubscription = this.paymentStatusService.delete(this.id).subscribe({
+    //         next: (resData) => {
+    //             console.log(resData);
+    //             this.router.navigate(['payments/payment-statuses']);
+    //         },
+    //     });
+    //     this.destroyRef.onDestroy(() => {
+    //         deleteSubscription.unsubscribe();
+    //     });
+    // }
 }

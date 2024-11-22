@@ -73,7 +73,15 @@ export abstract class EntityDetailsComponent<
         });
     }
 
-    protected abstract createDtoFormForm(): TCreateDto;
+    protected createDtoFormForm(): TCreateDto {
+        const dto: Partial<TCreateDto> = {};
+        this.fields.forEach((field) => {
+            if (field.includeInDto !== false) {
+                dto[field.key as keyof TCreateDto] = this.form.get(field.key)?.value;
+            }
+        });
+        return dto as TCreateDto;
+    }
 
     protected handleSuccess(response: any): void {
         console.log('operation successful: ', response);

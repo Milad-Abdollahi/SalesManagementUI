@@ -5,10 +5,14 @@ import { catchError, tap } from 'rxjs/operators';
 import { PaymentMethodCreateDto } from '../models/dtos/payment-methos-create-dto.model';
 import { EntityService } from './entity-service.interface';
 import { PaymentMethodRepositoryService } from '../../DataAccess/Repo/payment-method-repository.service';
+import { FieldBase } from '../base-classes/field-base';
 @Injectable({
     providedIn: 'root',
 })
 export class PaymentMethodService implements EntityService<PaymentMethod, PaymentMethodCreateDto> {
+    getFields(): Observable<FieldBase<string>[]> {
+        throw new Error('Method not implemented.');
+    }
     private paymentMethodRepositoryService = inject(PaymentMethodRepositoryService);
 
     // **Todo: Add paymentMethods signal to the interface

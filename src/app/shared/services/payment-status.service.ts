@@ -97,6 +97,7 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
             label: 'ID',
             controlType: 'textbox',
             disabled: true,
+            includeInDto: false,
             order: 1,
         },
         statusName: {
@@ -106,6 +107,7 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
             controlType: 'textbox',
             disabled: true,
             validators: [Validators.required],
+            includeInDto: true,
             order: 2,
         },
     };
@@ -128,13 +130,13 @@ export interface FieldConfig {
     required?: boolean;
     order?: number;
     disabled?: boolean;
+    includeInDto?: boolean;
     options?: { key: string; value: string }[];
 }
 
-export function generateFields<T>(
-    // interfaceDef: T,
-    config: { [key: string]: FieldConfig }
-): Observable<FieldBase<string>[]> {
+export function generateFields<T>(config: {
+    [key: string]: FieldConfig;
+}): Observable<FieldBase<string>[]> {
     const fields: FieldBase<string>[] = Object.keys(config).map((key, index) => {
         const fieldConfig = config[key];
         return new FieldBase<string>({
@@ -147,6 +149,7 @@ export function generateFields<T>(
             required: fieldConfig?.required,
             order: fieldConfig?.order || index + 1,
             disabled: fieldConfig?.disabled,
+            includeInDto: fieldConfig?.includeInDto,
             options: fieldConfig?.options || [],
         });
     });
