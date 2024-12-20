@@ -1,12 +1,12 @@
-import { OnInit, DestroyRef, Directive, signal, OnDestroy, inject } from '@angular/core';
+import { OnInit, Directive, signal, OnDestroy, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { EntityService } from '../services/entity-service.interface';
 import { FieldBase } from './field-base';
 import { FieldControlService } from '../services/field-control-service';
-import { errorContext } from 'rxjs/internal/util/errorContext';
+import { HelperFunctions } from '../helper-functions';
 
 @Directive()
 export abstract class EntityDetailsComponent<
@@ -15,14 +15,16 @@ export abstract class EntityDetailsComponent<
     TService extends EntityService<TEntity, TCreateDto>
 > implements OnInit, OnDestroy
 {
+    //Todo**: get rid of the:   finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))  parts!!!
     protected destroy$ = new Subject<void>();
 
     public form!: FormGroup;
     public fields: FieldBase<string>[] = [];
 
     protected abstract id: number;
-    protected abstract service: TService;
+    protected abstract entityService: TService;
     protected abstract router: Router;
+    protected navigateUrlAfterNewEntityAdded: string = '';
 
     protected fieldControlService = inject(FieldControlService);
 
@@ -34,19 +36,32 @@ export abstract class EntityDetailsComponent<
     }
 
     protected initializeForm(): void {
-        this.service.getFields().subscribe({
-            next: (fields) => {
-                this.fields = fields;
-                this.form = this.fieldControlService.toFormGroup(fields);
-            },
-        });
+        this.entityService
+            .getFields()
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))
+            )
+            .subscribe({
+                next: (fields) => {
+                    this.fields = fields;
+                    this.form = this.fieldControlService.toFormGroup(fields);
+                },
+            });
     }
+
     protected loadEntity(): void {
-        this.service.getById(this.id).subscribe({
-            next: (entity) => {
-                this.form.patchValue(entity as { [key: string]: any });
-            },
-        });
+        this.entityService
+            .getById(this.id)
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))
+            )
+            .subscribe({
+                next: (entity) => {
+                    this.form.patchValue(entity as { [key: string]: any });
+                },
+            });
     }
 
     onEditing() {
@@ -54,26 +69,46 @@ export abstract class EntityDetailsComponent<
         this.isEditingSignal.set(true);
     }
 
+    onAddNew() {
+        const createDto: TCreateDto = this.createDtoFromFields();
+        this.entityService.create(createDto);
+    }
+
     onSubmit() {
-        const data: TCreateDto = this.createDtoFormForm();
-        this.service.edit(this.id, data).subscribe({
-            next: (res) => this.handleSuccess(res),
-            error: (res) => this.handleError(res),
-            complete: () => {
-                this.form.disable();
-                this.isEditingSignal.set(false);
-            },
-        });
+        const createDto: TCreateDto = this.createDtoFromFields();
+        this.entityService
+            .edit(this.id, createDto)
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))
+            )
+            .subscribe({
+                next: (res) => this.handleSuccess(res),
+                error: (err) => {
+                    window.alert(HelperFunctions.extractErrorMessages(err.error));
+                    throw new Error(err);
+                },
+                complete: () => {
+                    this.form.disable();
+                    this.isEditingSignal.set(false);
+                },
+            });
     }
 
     onDelete() {
-        this.service.delete(this.id).subscribe({
-            next: () => this.router.navigate(['/']),
-            error: (err) => this.handleError(err),
-        });
+        this.entityService
+            .delete(this.id)
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))
+            )
+            .subscribe({
+                next: () => this.router.navigate(['/']),
+                error: (err) => this.handleError(err),
+            });
     }
 
-    protected createDtoFormForm(): TCreateDto {
+    protected createDtoFromFields(): TCreateDto {
         const dto: Partial<TCreateDto> = {};
         this.fields.forEach((field) => {
             if (field.includeInDto !== false) {

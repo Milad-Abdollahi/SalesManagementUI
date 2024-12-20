@@ -21,7 +21,7 @@ export class EntityFormComponent implements OnInit {
     @Output() submitEvent = new EventEmitter<void>();
     @Output() deleteEvent = new EventEmitter<void>();
 
-    public isEditing = false;
+    // public isEditing = false;
 
     constructor(private fieldControlService: FieldControlService) {}
     ngOnInit(): void {}
