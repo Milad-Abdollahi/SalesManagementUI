@@ -1,4 +1,4 @@
-<form [formGroup]="newPaymentStatusForm" (ngSubmit)="onSave()" dir="rtl">
+<!-- <form [formGroup]="newPaymentStatusForm" (ngSubmit)="onSave()" dir="rtl">
     <div class="mb-3 row" dir="rtl">
         <label for="methodName" class="col-sm-2 col-form-label text-end">وضعیت پرداخت</label>
         <div class="col-sm-10">
@@ -12,4 +12,10 @@
             </button>
         </div>
     </div>
-</form>
+</form> -->
+<app-entity-form
+    [fields]="fields"
+    [form]="form"
+    [isEditingSignal]="isEditingSignal"
+    (submitEvent)="onSaveNew()"
+></app-entity-form>

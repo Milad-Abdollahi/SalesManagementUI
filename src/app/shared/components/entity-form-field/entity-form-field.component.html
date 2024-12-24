@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    @if (!isValid && (form.touched || form.dirty)) {
+    @if (!isValid && field.required && (form.touched || form.dirty)) {
     <div class="errorMessage">{{ field.label }} is required!</div>
     }
 </div>

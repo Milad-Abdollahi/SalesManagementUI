@@ -24,7 +24,13 @@ export class EntityFormComponent implements OnInit {
     // public isEditing = false;
 
     constructor(private fieldControlService: FieldControlService) {}
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        if (this.isEditingSignal()) {
+            this.form.enable();
+            //Todo**: try disabling id automatically based on @Input() fields: FieldBase<string>[]
+            this.form.get('id')?.disable();
+        }
+    }
     onSubmit() {
         console.log(this.form);
         this.submitEvent.emit();

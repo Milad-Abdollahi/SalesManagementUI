@@ -22,7 +22,7 @@ export class PaymentStatusDetailsComponent extends EntityDetailsComponent<
 > {
     // id is imported from the url
     @Input({ transform: numberAttribute }) id = 0;
-
+    
     entityService = inject(PaymentStatusService);
 
     //Todo**: try moving router into the base class

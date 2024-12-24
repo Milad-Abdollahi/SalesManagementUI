@@ -46,6 +46,7 @@ export abstract class EntityDetailsComponent<
                 next: (fields) => {
                     this.fields = fields;
                     this.form = this.fieldControlService.toFormGroup(fields);
+                    this.form.disable();
                 },
             });
     }
@@ -69,9 +70,29 @@ export abstract class EntityDetailsComponent<
         this.isEditingSignal.set(true);
     }
 
-    onAddNew() {
+    onSaveNew() {
         const createDto: TCreateDto = this.createDtoFromFields();
-        this.entityService.create(createDto);
+        this.entityService
+            .create(createDto)
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))
+            )
+            .subscribe({
+                next: (res) => {
+                    this.handleSuccess(res);
+                    this.router.navigate([this.navigateUrlAfterNewEntityAdded, (res as any).id]);
+                },
+                error: (err) => {
+                    window.alert(HelperFunctions.extractErrorMessages(err.error));
+                    throw new Error(err);
+                },
+                complete: () => {
+                    this.form.disable();
+                    this.isEditingSignal.set(false);
+                },
+            });
+        console.log(createDto);
     }
 
     onSubmit() {
@@ -111,7 +132,10 @@ export abstract class EntityDetailsComponent<
     protected createDtoFromFields(): TCreateDto {
         const dto: Partial<TCreateDto> = {};
         this.fields.forEach((field) => {
-            if (field.includeInDto !== false) {
+            if (
+                field.includeInDto
+                // !== false
+            ) {
                 dto[field.key as keyof TCreateDto] = this.form.get(field.key)?.value;
             }
         });

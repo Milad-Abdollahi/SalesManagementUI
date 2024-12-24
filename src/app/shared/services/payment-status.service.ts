@@ -92,20 +92,22 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
     fieldConfig: { [key: string]: FieldConfig } = {
         // Todo**: change the name of value to initialValue also make it optional
         id: {
-            initialValue: 5,
+            initialValue: 0,
+            required: false,
             key: 'id',
             label: 'ID',
             controlType: 'textbox',
-            disabled: true,
+            disabled: false,
             includeInDto: false,
             order: 1,
         },
         statusName: {
-            initialValue: 'aass',
+            initialValue: '',
+            required: true,
             key: 'statusName',
             label: 'Status Name',
             controlType: 'textbox',
-            disabled: true,
+            disabled: false,
             validators: [Validators.required],
             includeInDto: true,
             order: 2,
