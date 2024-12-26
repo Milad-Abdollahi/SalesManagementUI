@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
 import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
-import { HelperFunctions } from '../../../shared/helper-functions';
 import { IPaymentMethod } from '../../../DataAccess/Models/payment-method.model';
 import { PaymentMethodService } from '../payment-method.service';
 import { PaymentMethodCreateDto } from '../../../DataAccess/Models/Dto/payment-method-create-dto';
