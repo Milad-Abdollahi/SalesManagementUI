@@ -1,15 +1,6 @@
-<form [formGroup]="newPaymentMethodForm" (ngSubmit)="onSave()" dir="rtl">
-    <div class="mb-3 row">
-        <label for="methodName" class="col-sm-2 col-form-label text-end">روش پرداخت</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="methodName" formControlName="methodName" />
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <div class="col-sm-10 offset-sm-2">
-            <button class="btn btn-primary" type="submit" [disabled]="newPaymentMethodForm.invalid">
-                ذخیره
-            </button>
-        </div>
-    </div>
-</form>
+<app-entity-form
+    [fields]="fields"
+    [form]="form"
+    [isEditingSignal]="isEditingSignal"
+    (submitEvent)="onSaveNew()"
+></app-entity-form>

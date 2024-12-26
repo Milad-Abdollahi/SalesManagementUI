@@ -3,7 +3,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
 import { Router } from '@angular/router';
 
-import { PaymentMethodService } from '../../shared/services/payment-method.service';
+import { PaymentMethodService } from './payment-method.service';
 import { EntityGridComponent } from '../../shared/components/entity-grid/entity-grid.component';
 
 // URL: /payment-methods

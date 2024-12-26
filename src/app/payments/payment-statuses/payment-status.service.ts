@@ -1,13 +1,14 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { PaymentStatusRepositoryService } from '../../DataAccess/Repo/payment-status-repository.service';
 import { IPaymentStatus } from '../../DataAccess/Models/payment-status.model';
-import { Observable, of, take, tap, throwError } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { PaymentStatusCreateDto } from '../../DataAccess/Models/Dto/payment-status-create-dto';
-import { EntityService } from './entity-service.interface';
-import { FieldBase } from '../base-classes/field-base';
-import { DropdownField } from '../form-field-types/dropdown-field';
-import { TextBoxField } from '../form-field-types/textbox-field';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { EntityService } from '../../shared/services/entity-service.interface';
+import { FieldBase } from '../../shared/base-classes/field-base';
+import { Validators } from '@angular/forms';
+
+import { generateFields } from '../../shared/helper-functions';
+import { FieldConfig } from '../../shared/interfaces/FieldConfig';
 
 @Injectable({
     providedIn: 'root',
@@ -23,9 +24,8 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
 
     public selectedPaymentStatusFormFields: WritableSignal<FieldBase<string>[]> = signal([]);
 
-    // public isEditing = signal(false);
-
     // Create
+
     public create(paymentStatusCreateDto: PaymentStatusCreateDto): Observable<IPaymentStatus> {
         return this.paymentStatusRepositoryService
             .create('https://localhost:7276/api/', 'PaymentStatuses', paymentStatusCreateDto)
@@ -39,6 +39,8 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
     }
 
     // Read
+    // Todo**: Ask AI wheter the following method creates 2 different IPaymentStatus[] one here and one in the component?
+
     public getAll(): Observable<IPaymentStatus[]> {
         return this.paymentStatusRepositoryService
             .readAll('https://localhost:7276/api/', 'PaymentStatuses')
@@ -74,7 +76,7 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
             .pipe(
                 tap({
                     error: (err) => {
-                        console.dir(err.error);
+                        console.dir(err);
                     },
                 })
             );
@@ -89,8 +91,7 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
         );
     }
 
-    fieldConfig: { [key: string]: FieldConfig } = {
-        // Todo**: change the name of value to initialValue also make it optional
+    fieldsConfig: { [key: string]: FieldConfig } = {
         id: {
             initialValue: 0,
             required: false,
@@ -114,46 +115,9 @@ export class PaymentStatusService implements EntityService<IPaymentStatus, Payme
         },
     };
 
-    // TEST
     // Todo**: try using a signal for this
     // Todo**: get from a remote source of field metadata
     getFields(): Observable<FieldBase<string>[]> {
-        return generateFields<IPaymentStatus>(this.fieldConfig);
+        return generateFields<IPaymentStatus>(this.fieldsConfig);
     }
-}
-
-export interface FieldConfig {
-    initialValue: any;
-    key: string;
-    label: string;
-    controlType: string;
-    type?: string;
-    validators?: ValidatorFn[];
-    required?: boolean;
-    order?: number;
-    disabled?: boolean;
-    includeInDto?: boolean;
-    options?: { key: string; value: string }[];
-}
-
-export function generateFields<T>(config: {
-    [key: string]: FieldConfig;
-}): Observable<FieldBase<string>[]> {
-    const fields: FieldBase<string>[] = Object.keys(config).map((key, index) => {
-        const fieldConfig = config[key];
-        return new FieldBase<string>({
-            initialValue: fieldConfig.initialValue,
-            key,
-            label: fieldConfig?.label || key,
-            controlType: fieldConfig?.controlType || 'textbox',
-            type: fieldConfig?.type,
-            validators: fieldConfig?.validators || [],
-            required: fieldConfig?.required,
-            order: fieldConfig?.order || index + 1,
-            disabled: fieldConfig?.disabled,
-            includeInDto: fieldConfig?.includeInDto,
-            options: fieldConfig?.options || [],
-        });
-    });
-    return of(fields.sort((a, b) => a.order - b.order));
 }

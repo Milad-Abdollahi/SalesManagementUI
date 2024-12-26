@@ -34,6 +34,9 @@ export class EntityFormComponent implements OnInit {
     onSubmit() {
         console.log(this.form);
         this.submitEvent.emit();
+
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
     }
     onEditing() {
         this.form.enable();

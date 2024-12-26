@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { PaymentStatusService } from '../../shared/services/payment-status.service';
+import { PaymentStatusService } from './payment-status.service';
 import { ColDef } from 'ag-grid-community';
 import { EntityGridComponent } from '../../shared/components/entity-grid/entity-grid.component';
 

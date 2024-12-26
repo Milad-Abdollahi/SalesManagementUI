@@ -1,79 +1,34 @@
 import { Component, DestroyRef, inject, Input, numberAttribute, OnInit } from '@angular/core';
-import { PaymentMethodService } from '../../../shared/services/payment-method.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { PaymentMethodCreateDto } from '../../../shared/models/dtos/payment-methos-create-dto.model';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
+import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
+import { PaymentMethodCreateDto } from '../../../DataAccess/Models/Dto/payment-method-create-dto';
+import { IPaymentMethod } from '../../../DataAccess/Models/payment-method.model';
+import { PaymentMethodService } from '../payment-method.service';
 
 @Component({
     selector: 'app-payment-method-details',
     standalone: true,
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, EntityFormComponent],
     templateUrl: './payment-method-details.component.html',
     styleUrl: './payment-method-details.component.css',
 })
-export class PaymentMethodDetailsComponent implements OnInit {
+export class PaymentMethodDetailsComponent extends EntityDetailsComponent<
+    IPaymentMethod,
+    PaymentMethodCreateDto,
+    PaymentMethodService
+> {
     // id is imported from the url
     @Input({ transform: numberAttribute }) id = 0;
 
-    private paymentMethodService = inject(PaymentMethodService);
-    private destroyRef = inject(DestroyRef);
-    private router = inject(Router);
+    protected override entityService = inject(PaymentMethodService);
 
-    public paymentMethod = this.paymentMethodService.loadedPaymentMethod;
-
-    public isEditing = false;
-
-    public paymentMethodForm = new FormGroup({
-        id: new FormControl<number | undefined>({ value: undefined, disabled: true }),
-        methodName: new FormControl<string | undefined>({ value: undefined, disabled: true }),
-    });
-
-    ngOnInit(): void {
-        const subscription = this.paymentMethodService.getById(this.id).subscribe({
-            next: () => {
-                this.paymentMethodForm.patchValue({
-                    id: this.paymentMethod()?.id,
-                    methodName: this.paymentMethod()?.methodName,
-                });
-            },
-            error: (err) => console.log(err),
-        });
-
-        this.destroyRef.onDestroy(() => subscription.unsubscribe());
-    }
-
-    onEditing() {
-        this.isEditing = true;
-        this.paymentMethodForm.get('methodName')?.enable();
-    }
-
-    onSubmit() {
-        const data: PaymentMethodCreateDto = {
-            methodName: this.paymentMethodForm.value.methodName!,
-        };
-        const updateSubscription = this.paymentMethodService.edit(this.id, data).subscribe({
-            next: (resData) => {
-                console.log(resData);
-            },
-            error: (err) => {
-                window.alert(err);
-            },
-            complete: () => {
-                this.paymentMethodForm.get('methodName')?.disable();
-                this.isEditing = false;
-            },
-        });
-        this.destroyRef.onDestroy(() => updateSubscription.unsubscribe());
-    }
-
-    onDelete() {
-        const deleteSubscription = this.paymentMethodService.delete(this.id).subscribe({
-            next: (resData) => {
-                console.log(resData);
-                this.router.navigate(['payments/payment-methods']);
-            },
-        });
-
-        this.destroyRef.onDestroy(() => deleteSubscription.unsubscribe());
+    //Todo**: try moving router into the base class
+    router = inject(Router);
+    
+    constructor() {
+        super();
     }
 }

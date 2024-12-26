@@ -40,7 +40,11 @@ export abstract class EntityDetailsComponent<
             .getFields()
             .pipe(
                 takeUntil(this.destroy$),
-                finalize(() => console.log('Subscription finalized (unsubscribed or completed)'))
+                finalize(() =>
+                    console.log(
+                        'Subscription finalized for getFields() (unsubscribed or completed)'
+                    )
+                )
             )
             .subscribe({
                 next: (fields) => {
