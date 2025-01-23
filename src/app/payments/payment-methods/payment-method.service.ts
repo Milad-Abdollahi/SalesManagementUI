@@ -1,11 +1,11 @@
 import { inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { ValidatorFn, Validators } from '@angular/forms';
+import { Observable, of, tap } from 'rxjs';
 import { PaymentMethodRepositoryService } from '../../DataAccess/Repo/payment-method-repository.service';
 import { IPaymentMethod } from '../../DataAccess/Models/payment-method.model';
-import { Observable, of, tap } from 'rxjs';
 import { PaymentMethodCreateDto } from '../../DataAccess/Models/Dto/payment-method-create-dto';
 import { EntityService } from '../../shared/services/entity-service.interface';
 import { FieldBase } from '../../shared/base-classes/field-base';
-import { ValidatorFn, Validators } from '@angular/forms';
 
 import { FieldConfig } from '../../shared/interfaces/FieldConfig';
 import { generateFields } from '../../shared/helper-functions';

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
-import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
+import { EntityDetailsBase } from '../../../shared/base-classes/entity-details-base';
 import { PaymentMethodCreateDto } from '../../../DataAccess/Models/Dto/payment-method-create-dto';
 import { IPaymentMethod } from '../../../DataAccess/Models/payment-method.model';
 import { PaymentMethodService } from '../payment-method.service';
@@ -15,7 +15,7 @@ import { PaymentMethodService } from '../payment-method.service';
     templateUrl: './payment-method-details.component.html',
     styleUrl: './payment-method-details.component.css',
 })
-export class PaymentMethodDetailsComponent extends EntityDetailsComponent<
+export class PaymentMethodDetailsComponent extends EntityDetailsBase<
     IPaymentMethod,
     PaymentMethodCreateDto,
     PaymentMethodService
@@ -27,7 +27,7 @@ export class PaymentMethodDetailsComponent extends EntityDetailsComponent<
 
     //Todo**: try moving router into the base class
     router = inject(Router);
-    
+
     constructor() {
         super();
     }

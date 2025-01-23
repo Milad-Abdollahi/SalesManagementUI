@@ -13,16 +13,23 @@
                 [type]="field.type"
             />
             }@case ('dropdown') {
-            <select [id]="field.key" [formControlName]="field.key">
+            <select
+                class="dropdown-center dropdown-menu-xxl-start dropdown-toggle"
+                [id]="field.key"
+                [formControlName]="field.key"
+            >
                 @for (opt of field.options; track opt) {
-                <option [value]="opt.key">{{ opt.value }}</option>
+                <option class="dropdown-item text-center" [value]="opt.key">
+                    {{ opt.value }}
+                </option>
                 }
             </select>
             }}
         </div>
     </div>
 
-    @if (!isValid && field.required && (form.touched || form.dirty)) {
-    <div class="errorMessage">{{ field.label }} is required!</div>
+    @if (!isValid && field.required && (form.controls[field.key].touched ||
+    form.controls[field.key].dirty)) {
+    <div class="errorMessage text-danger text-center">{{ field.label }} ضروری می باشد</div>
     }
 </div>

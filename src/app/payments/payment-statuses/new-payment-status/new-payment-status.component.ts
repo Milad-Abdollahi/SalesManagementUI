@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 
 import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
-import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
+import { EntityDetailsBase } from '../../../shared/base-classes/entity-details-base';
 import { IPaymentStatus } from '../../../DataAccess/Models/payment-status.model';
 import { PaymentStatusCreateDto } from '../../../DataAccess/Models/Dto/payment-status-create-dto';
 import { PaymentStatusService } from '../payment-status.service';
@@ -15,7 +15,7 @@ import { PaymentStatusService } from '../payment-status.service';
     templateUrl: './new-payment-status.component.html',
     styleUrl: './new-payment-status.component.css',
 })
-export class NewPaymentStatusComponent extends EntityDetailsComponent<
+export class NewPaymentStatusComponent extends EntityDetailsBase<
     IPaymentStatus,
     PaymentStatusCreateDto,
     PaymentStatusService
@@ -34,9 +34,6 @@ export class NewPaymentStatusComponent extends EntityDetailsComponent<
     public router = inject(Router);
     protected override navigateUrlAfterNewEntityAdded = 'payments/payment-statuses/details';
 
+    // Todo**: push this indide the EntityDetailsComponent base class if possible
     entityService = inject(PaymentStatusService);
-
-    public newPaymentStatusForm = new FormGroup({
-        statusName: new FormControl<string | undefined>(undefined, Validators.required),
-    });
 }

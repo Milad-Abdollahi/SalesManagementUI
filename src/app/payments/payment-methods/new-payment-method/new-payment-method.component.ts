@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 
 import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
-import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
+import { EntityDetailsBase } from '../../../shared/base-classes/entity-details-base';
 import { IPaymentMethod } from '../../../DataAccess/Models/payment-method.model';
 import { PaymentMethodService } from '../payment-method.service';
 import { PaymentMethodCreateDto } from '../../../DataAccess/Models/Dto/payment-method-create-dto';
@@ -15,7 +15,7 @@ import { PaymentMethodCreateDto } from '../../../DataAccess/Models/Dto/payment-m
     templateUrl: './new-payment-method.component.html',
     styleUrl: './new-payment-method.component.css',
 })
-export class NewPaymentMethodComponent extends EntityDetailsComponent<
+export class NewPaymentMethodComponent extends EntityDetailsBase<
     IPaymentMethod,
     PaymentMethodCreateDto,
     PaymentMethodService

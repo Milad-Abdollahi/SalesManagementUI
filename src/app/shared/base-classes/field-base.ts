@@ -5,13 +5,13 @@ export class FieldBase<T> {
     key: string;
     label: string;
     required?: boolean;
-    order: number = 0; 
+    order: number = 0;
     controlType: string;
     type?: string;
     validators: ValidatorFn[];
     disabled?: boolean;
     includeInDto?: boolean;
-    options?: { key: string; value: string }[];
+    options?: { key: string; value: string; label?: string }[];
     constructor(options: {
         initialValue: T;
         key?: string;

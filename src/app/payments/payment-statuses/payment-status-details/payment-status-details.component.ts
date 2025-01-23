@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { EntityFormComponent } from '../../../shared/components/entity-form/entity-form.component';
-import { EntityDetailsComponent } from '../../../shared/base-classes/entity-details-compoenent';
+import { EntityDetailsBase } from '../../../shared/base-classes/entity-details-base';
 import { IPaymentStatus } from '../../../DataAccess/Models/payment-status.model';
 import { PaymentStatusCreateDto } from '../../../DataAccess/Models/Dto/payment-status-create-dto';
 import { PaymentStatusService } from '../payment-status.service';
@@ -15,7 +15,7 @@ import { PaymentStatusService } from '../payment-status.service';
     templateUrl: './payment-status-details.component.html',
     styleUrl: './payment-status-details.component.css',
 })
-export class PaymentStatusDetailsComponent extends EntityDetailsComponent<
+export class PaymentStatusDetailsComponent extends EntityDetailsBase<
     IPaymentStatus,
     PaymentStatusCreateDto,
     PaymentStatusService
@@ -23,10 +23,10 @@ export class PaymentStatusDetailsComponent extends EntityDetailsComponent<
     // id is imported from the url
     @Input({ transform: numberAttribute }) id = 0;
 
-    entityService = inject(PaymentStatusService);
+    protected override entityService: PaymentStatusService = inject(PaymentStatusService);
 
     //Todo**: try moving router into the base class
-    router = inject(Router);
+    protected override router: Router = inject(Router);
 
     constructor() {
         super();

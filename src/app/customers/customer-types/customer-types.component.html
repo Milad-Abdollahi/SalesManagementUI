@@ -1,1 +1,8 @@
-<p>customer-types works!</p>
+<app-entity-grid
+    [service]="customerTypeService"
+    detailRoute="customers/customer-types/details"
+    addNewRoute="customers/customer-types/new"
+    [colDefs]="coldefs"
+>
+    <h2 dir="rtl">نوع های مشتری</h2>
+</app-entity-grid>

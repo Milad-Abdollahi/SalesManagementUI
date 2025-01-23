@@ -4,66 +4,58 @@ import { Observable, tap, throwError } from 'rxjs';
 
 import { IHttpClientDataAccessService } from '../HttpClient/Ihttp-client-data-access.service';
 import { HttpClientDataAccessService } from '../HttpClient/http-client-data-access.service';
-import { IPaymentMethod } from '../Models/payment-method.model';
-import { PaymentMethodCreateDto } from '../Models/Dto/payment-method-create-dto';
+import { ICustomerType } from '../Models/customer-type.model';
+import { CustomerTypeCreateDto } from '../Models/Dto/customer-type-create-dto';
 
 @Injectable({
     providedIn: 'root',
 })
-export class PaymentMethodRepositoryService
-    implements IRepositoryService<IPaymentMethod, PaymentMethodCreateDto>
+export class CustomerTypeRepositoryService
+    implements IRepositoryService<ICustomerType, CustomerTypeCreateDto>
 {
     private httpClientDataAccessService: IHttpClientDataAccessService = inject(
         HttpClientDataAccessService
     );
 
-    // Create
-
     create(
         baseUrl: string,
         endpointPath: string,
-        reqBody: PaymentMethodCreateDto
-    ): Observable<IPaymentMethod> {
+        reqBody: CustomerTypeCreateDto
+    ): Observable<ICustomerType> {
         const result = this.httpClientDataAccessService.postData<
-            IPaymentMethod,
-            PaymentMethodCreateDto
+            ICustomerType,
+            CustomerTypeCreateDto
         >(baseUrl, endpointPath, reqBody);
         return result;
     }
 
     // Read
 
-    readAll(baseUrl: string, endpointPath: string): Observable<IPaymentMethod[]> {
-        const result = this.httpClientDataAccessService.getDataArray<IPaymentMethod>(
+    readAll(baseUrl: string, endpointPath: string): Observable<ICustomerType[]> {
+        const result = this.httpClientDataAccessService.getDataArray<ICustomerType>(
             baseUrl,
             endpointPath
         );
         return result;
     }
-
-    readById(baseUrl: string, endpointPath: string, id: number): Observable<IPaymentMethod> {
-        const result = this.httpClientDataAccessService.getData<IPaymentMethod>(
+    readById(baseUrl: string, endpointPath: string, id: number): Observable<ICustomerType> {
+        const result = this.httpClientDataAccessService.getData<ICustomerType>(
             baseUrl,
             `${endpointPath}${id}`
         );
         return result;
     }
 
-    // Todo: this class is only responsible for data access not handling errors~!
     // Update
 
     public update(
         baseUrl: string,
         endpointPath: string,
         id: number,
-        paymentMethodCreateDto: PaymentMethodCreateDto
+        customerTypeCreateDto: CustomerTypeCreateDto
     ): Observable<any> {
         const result = this.httpClientDataAccessService
-            .putData<PaymentMethodCreateDto>(
-                baseUrl,
-                `${endpointPath}${id}`,
-                paymentMethodCreateDto
-            )
+            .putData<CustomerTypeCreateDto>(baseUrl, `${endpointPath}${id}`, customerTypeCreateDto)
             .pipe(
                 tap({
                     error: (err) => {

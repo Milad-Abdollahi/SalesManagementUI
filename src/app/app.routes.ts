@@ -9,20 +9,28 @@ import { PaymentStatusesComponent } from './payments/payment-statuses/payment-st
 import { PaymentStatusDetailsComponent } from './payments/payment-statuses/payment-status-details/payment-status-details.component';
 import { NewPaymentStatusComponent } from './payments/payment-statuses/new-payment-status/new-payment-status.component';
 import { CustomerTypesComponent } from './customers/customer-types/customer-types.component';
+import { CustomerTypeDetailsComponent } from './customers/customer-types/customer-type-details/customer-type-details.component';
+import { NewCustomerTypeComponent } from './customers/customer-types/new-customer-type/new-customer-type.component';
+import { CustomersInfoComponent } from './customers/customers-info/customers-info.component';
+import { CustomerInfoDetailsComponent } from './customers/customers-info/customer-info-details/customer-info-details.component';
 
 export const routes: Routes = [
     { path: 'users', component: UsersComponent },
     {
         path: 'customers',
         component: CustomersComponent,
-        children: [{ path: 'customer-types', component: CustomerTypesComponent }],
+        children: [
+            { path: 'customer-info', component: CustomersInfoComponent },
+            { path: 'customer-info/details/:id', component: CustomerInfoDetailsComponent },
+            { path: 'customer-types', component: CustomerTypesComponent },
+            { path: 'customer-types/details/:id', component: CustomerTypeDetailsComponent },
+            { path: 'customer-types/new', component: NewCustomerTypeComponent },
+        ],
     },
     {
         path: 'payments',
         component: PaymentsComponent,
         children: [
-            // Todo**: Delete next line if it's useless
-            // { path: 'payments-info', component: PaymentsComponent },
             //
             { path: 'payment-methods', component: PaymentMethodsComponent },
             { path: 'payment-methods/details/:id', component: PaymentMethodDetailsComponent },

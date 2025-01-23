@@ -9,7 +9,7 @@ import { FieldControlService } from '../services/field-control-service';
 import { HelperFunctions } from '../helper-functions';
 
 @Directive()
-export abstract class EntityDetailsComponent<
+export abstract class EntityDetailsBase<
     TEntity,
     TCreateDto,
     TService extends EntityService<TEntity, TCreateDto>
@@ -32,7 +32,8 @@ export abstract class EntityDetailsComponent<
 
     ngOnInit(): void {
         this.initializeForm();
-        this.loadEntity();
+        this.loadEntityAndPatchFormValues();
+        this.setOptions();
     }
 
     protected initializeForm(): void {
@@ -49,13 +50,14 @@ export abstract class EntityDetailsComponent<
             .subscribe({
                 next: (fields) => {
                     this.fields = fields;
+                    // Todo**: Move toFormGroup method to a HelperFunctions file
                     this.form = this.fieldControlService.toFormGroup(fields);
                     this.form.disable();
                 },
             });
     }
 
-    protected loadEntity(): void {
+    protected loadEntityAndPatchFormValues(): void {
         this.entityService
             .getById(this.id)
             .pipe(
@@ -64,10 +66,16 @@ export abstract class EntityDetailsComponent<
             )
             .subscribe({
                 next: (entity) => {
-                    this.form.patchValue(entity as { [key: string]: any });
+                    var flattenedEntity = flattenObject(entity as Record<string, unknown>);
+                    // console.dir(flattenObject(entity as Record<string, unknown>));
+                    console.dir(this.form);
+                    this.form.patchValue(flattenedEntity);
+                    console.dir(this.form);
                 },
             });
     }
+
+    setOptions() {}
 
     onEditing() {
         this.form.enable();
@@ -99,7 +107,9 @@ export abstract class EntityDetailsComponent<
         console.log(createDto);
     }
 
-    onSubmit() {
+    onSubmit(event?: any) {
+        console.log(event);
+
         const createDto: TCreateDto = this.createDtoFromFields();
         this.entityService
             .edit(this.id, createDto)
@@ -158,4 +168,30 @@ export abstract class EntityDetailsComponent<
         this.destroy$.next();
         this.destroy$.complete();
     }
+}
+
+function flattenObject(
+    obj: Record<string, unknown>,
+    parentKey = '',
+    result: Record<string, unknown> = {}
+): Record<string, unknown> {
+    for (const key in obj) {
+        // If you're using `for..in`, you might want to check `hasOwnProperty`:
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) {
+            continue;
+        }
+
+        const value = obj[key];
+        // Build the new key (e.g. parentKey + '.' + key).
+        const newKey = parentKey ? `${parentKey}_${key}` : key;
+
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+            // Recursively flatten
+            flattenObject(value as Record<string, unknown>, newKey, result);
+        } else {
+            // Assign the value
+            result[newKey] = value;
+        }
+    }
+    return result;
 }

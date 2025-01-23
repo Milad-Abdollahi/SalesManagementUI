@@ -4,7 +4,7 @@ export interface FieldConfig {
     initialValue: any;
     key: string;
     label: string;
-    controlType: string;
+    controlType: 'textbox' | 'dropdown' | 'group';
     type?: string;
     validators?: ValidatorFn[];
     required?: boolean;
